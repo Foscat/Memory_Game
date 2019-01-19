@@ -1,27 +1,27 @@
 import React, { Component } from "react";
-import Jumbotron from "./components/Jumbotron/Jumbotron";
-import Wrapper from "./components/Wrapper/Scoreboard";
 import Card from "./components/Card/Card";
+import Wrapper from "./components/Wrapper/Wrapper";
+import Jumbotron from "./components/Jumbotron/Jumbotron";
 import neckbeards from "./neckbeards.json";
 
 let highscore = 0;
 let score = 0;
 
-class App extends Comment {
+class App extends Component {
 
   state = {
     neckbeards,
     highscore,
     score
   };
+  
 
-  RenderCards() {
+  RenderCards = () => {
     return (
       <div>
-      <Jumbotron></Jumbotron>
       
       <Wrapper>
-        <Scoreboard score={this.state.score} highscore={this.state.highscore}></Scoreboard>
+        <Jumbotron score={this.state.score} highscore={this.state.highscore}></Jumbotron>
         {this.state.neckbeards.map(beard => (
           <Card
             clickCount={this.clickCount}
@@ -56,12 +56,34 @@ class App extends Comment {
           return true;
         } // If the count of the individual nb is not equil to 0 then call game over function
           else{
-            this.gameOver();
+            this.GameOver();
           }
-      }
-    })
+      }; // End of if nb function
+    }); // End of find neckbeard state 
+  }; // End of ClickCounter
+
+  // Handles all Game over outcomes
+  GameOver = () => {
+    // If when the game ends that the users score is over the current highscore
+    if(this.state.score > this.state.highscore) {
+      // Then set the highscore to the users score.
+      this.setState({highscore: this.state.highscore}, function() {
+        // Check for updated highscore in the function
+        console.log(this.state.highscore);
+      });
+    }
+    // Loop through all neckbeard cards and set count back to 0 for next game
+    this.state.neckbeards.forEach(beard => {
+      beard.count = 0;
+    });
+    alert("Your beard busting days are over bucco!");
+    alert(`Your score: ${this.state.score}`);
+    this.setState({score: 0});
+    return true;
   }
-}
-}
+  
+
+} // End of App
+
 
 export default App;
