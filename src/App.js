@@ -14,34 +14,13 @@ class App extends Component {
     highscore,
     score
   };
-  
 
-  RenderCards = () => {
-    return (
-      <div>
-      
-      <Wrapper>
-        <Jumbotron score={this.state.score} highscore={this.state.highscore}></Jumbotron>
-        {this.state.neckbeards.map(beard => (
-          <Card
-            clickCount={this.clickCount}
-            id={beard.id}
-            key={beard.id}
-            image={beard.image}
-          />
-        ))}
-      </Wrapper>
-      </div>
-    );
-  }
-     
-
-  // Function that tracks user clicks each game
+    // Function that tracks user clicks each game
   ClickCounter = id => {
     // It finds the list neckbreads in the state and each is held in the nb argument.
     //  The i as the second argument stands as a iteratior giving this function a for-loop
     this.state.neckbeards.find((nb, i) => {
-
+    
       // If the id of the clicked object matches with that particular nb that has that id then run function
       if (nb.id === id) {
         // The inital state of all nb is zero so if it true move to next function
@@ -61,6 +40,26 @@ class App extends Component {
       }; // End of if nb function
     }); // End of find neckbeard state 
   }; // End of ClickCounter
+  
+  // Start of card rendering function
+  RenderCards() {
+    return (
+      <Wrapper>
+        <Jumbotron score={this.state.score} highscore={this.state.highscore}></Jumbotron>
+        {this.state.neckbeards.map(beard => (
+          <Card
+            ClickCounter={this.ClickCounter}
+            id={beard.id}
+            key={beard.id}
+            image={beard.image}
+          />
+        ))}
+      </Wrapper>
+    );
+  } //End of RenderCards
+     
+
+
 
   // Handles all Game over outcomes
   GameOver = () => {
@@ -76,8 +75,7 @@ class App extends Component {
     this.state.neckbeards.forEach(beard => {
       beard.count = 0;
     });
-    alert("Your beard busting days are over bucco!");
-    alert(`Your score: ${this.state.score}`);
+    alert(`Your beard busting days are over bucco! \nYour score: ${this.state.score}`);
     this.setState({score: 0});
     return true;
   }
