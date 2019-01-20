@@ -1,10 +1,13 @@
 import React from "react";
 
+
+
 const Card = props => (
-  <div className="card">
+    <div className="card" onClick={() => props.ClickCounter(props.id)}>
     <div className="card-body">
-      <img className="neckBeard" alt={props.image} src={props.image} />
+    <img alt={props.name} src={props.image} width="220px"  height="180px"/>
     </div>
-  </div>
-)
-export default Card;
+    </div>
+    );
+
+    export default Card;

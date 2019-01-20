@@ -1,3 +1,35 @@
+#root{
+  background-image: url("https://cdn.wallpapersafari.com/35/16/WhDLNG.png")
+}
 .jumbotron {
     background-color: darkcyan;
 }
+.wrapper {
+    width: 50%;
+    height: 70%;
+    display: grid;
+    grid: 250px / auto auto auto;
+    grid-gap: 5px;
+    background-color: rgba(155, 187, 212, 0.411);
+    padding: 10px;
+    margin: auto;
+}
+
+/* For aligning content to the horozontal center */
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Gives even spacing between elements */
+  .around {
+    justify-content: space-around;
+  }
+  /* To make items line up */
+  .line {
+    display: flex;
+  }
+  /* Quick way to make things really bold */
+  .boldest{
+    font-weight: bolder;
+  }
