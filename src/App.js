@@ -16,7 +16,8 @@ let score = 0;
     };
   
     // Function that tracks user clicks each game
-    ClickCounter = id => {
+    Counter = id => {
+      // alert("this is an alert");
       // It finds the list neckbreads in the state and each is held in the nb argument.
       // The i as the second argument stands as a iteratior giving this function a for-loop
       // eslint-disable-next-line
@@ -31,9 +32,13 @@ let score = 0;
               // Then console log that the change has been made
               console.log(this.state.score);
             });
+
+            this.setState({count : this.state.neckbeards.count + 1}, function() {
+              console.log(this.state.count);
+            });
             // Once score has increased then reshuffle cards
             this.state.neckbeards.sort(() => Math.random() - 0.5);
-            return true;
+            return false;
           } // If the count of the individual nb is not equil to 0 then call game over function
             else{
               this.GameOver();
@@ -76,7 +81,7 @@ let score = 0;
               {/* Map function goes through earch beard and makes a new array */}
               {this.state.neckbeards.map(beard => (
                 <Card
-                  count={this.ClickCounter}
+                  Counter={this.Counter}
                   id={beard.id}
                   key={beard.id}
                   image={beard.image}
