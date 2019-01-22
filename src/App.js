@@ -30,12 +30,12 @@ let score = 0;
             // This changes the set state of the game score to increment one 
             this.setState({score : this.state.score + 1} , function(){
               // Then console log that the change has been made
-              console.log(this.state.score);
+              console.log("Score: ", this.state.score);
             });
 
-            this.setState({count : this.state.neckbeards.count + 1}, function() {
-              console.log(this.state.count);
-            });
+            // this.setState({count : this.data.state + 1}, function() {
+            //   console.log("Count: ", this.state.count);
+            // });
             // Once score has increased then reshuffle cards
             this.state.neckbeards.sort(() => Math.random() - 0.5);
             return false;
@@ -84,6 +84,7 @@ let score = 0;
                   Counter={this.Counter}
                   id={beard.id}
                   key={beard.id}
+                  count={beard.count}
                   image={beard.image}
                 />
               ))}
