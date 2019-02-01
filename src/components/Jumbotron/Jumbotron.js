@@ -18,13 +18,13 @@ const Jumbotron = props =>  {
 
       <div className="Scorebox">
 
-        <div className="userScore">
+        <div className="userScore center">
           Score: {props.score}
         </div>
 
         <br/>
 
-        <div className="highScore">
+        <div className="highScore center">
           Highscore: {props.highscore}
         </div>
 

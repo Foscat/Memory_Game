@@ -3,73 +3,82 @@ import Card from "./components/Card";
 import Wrapper from "./components/Wrapper";
 import Jumbotron from "./components/Jumbotron";
 import neckbeards from "./neckbeards.json";
-
-let highscore = 0;
-let score = 0;
-let count = neckbeards.count;
   
   class App extends Component {
 
     state = {
       neckbeards,
-      highscore,
-      count,
-      score
+      highscore: 0,
+      score: 0
+    };
+
+    componentDidMount() {
+      this.setState({ neckbeards: this.shuffleCards(this.state.neckbeards) });
+    }
+  
+    // if a guess is regestered as correct call this method
+    handleCorrectGuess = shuffle => {
+      const { highscore, score } = this.state;
+      // This changes the set state of the game score to increment one 
+      const newScore = score + 1;
+      // If the current score is higher than the current highscore increase highscore 
+      const newHighscore = Math.max(newScore, highscore);
+  
+      this.setState({
+        // Once score has increased then reshuffle cards
+        neckbeards: this.shuffleCards(shuffle),
+        score: newScore,
+        highscore: newHighscore
+      });
     };
   
-    // Function that tracks user clicks each game
-    Counter = id => {
-      // alert("this is an alert");
-      // It finds the list neckbreads in the state and each is held in the nb argument.
-      // The i as the second argument stands as a iteratior giving this function a for-loop
-      // eslint-disable-next-line
-      this.state.neckbeards.find((nb, i) => {
-      
-        // If the id of the clicked object matches with that particular nb that has that id then run function
-        if (nb.id === id) {
-          // The inital state of all nb is zero so if it true move to next function
-          if(neckbeards[i].count === 0) {
-
-            // This changes the set state of the game score to increment one 
-            this.setState({score : this.state.score + 1} , function(){
-              // Then console log that the change has been made
-              console.log("Score: ", this.state.score);
-            });
-            this.setState({count: this.state.count}, function(){
-              console.log("count: ", this.state.count);
-            })
-            // Once score has increased then reshuffle cards
-            this.state.neckbeards.sort(() => Math.random() - 0.5);
-            return false;
-          } // If the count of the individual nb is not equil to 0 then call game over function
-            else{
-              this.GameOver();
-            }
-        }; // End of if nb function
-      }); // End of find neckbeard state 
-    }; // End of ClickCounter
-
-  
-    // Handles all Game over outcomes
-    GameOver = () => {
-      // If when the game ends that the users score is over the current highscore
-      if(this.state.score > this.state.highscore) {
-        // Then set the highscore to the users score.
-        this.setState({highscore: this.state.highscore}, function() {
-          // Check for updated highscore in the function
-          console.log(this.state.highscore);
-        });
-      }
-      // Loop through all neckbeard cards and set count back to 0 for next game
-      this.state.neckbeards.forEach(beard => {
-        beard.count = 0;
+    // If a guess is regestered as incorrect the call this method
+    handleIncorrectGuess = data => {
+      this.setState({
+        // Calls game over shuffle method
+        neckbeards: this.GameOver(neckbeards),
+        // Set score back to zero
+        score: 0
       });
+    };
+
+    // Handles all Game over outcomes
+    GameOver = neckbeards => {
+      // Loop through all neckbeard cards and set count back to 0 for next game
+      const resetDeck = neckbeards.map(cards => ({ ...cards, clicked: false }));
       alert(`Your beard busting days are over bucco! \nYour score: ${this.state.score}`);
-      this.setState({score: 0});
-      return true;
-    }
+      return this.shuffleCards(resetDeck);
+    };
+  
+    // Shuffles cards by re-arranging the array
+    shuffleCards = neckbeards => {
+      let i = neckbeards.length - 1;
+      while (i > 0) {
+        const nb = Math.floor(Math.random() * (i + 1));
+        const beards = neckbeards[i];
+        neckbeards[i] = neckbeards[nb];
+        neckbeards[nb] = beards;
+        i--;
+      }
+      return neckbeards;
+    };
 
-
+    handleCardClick = id => {
+      let guessedCorrectly = false;
+      const newData = this.state.neckbeards.map(item => {
+        const newItem = { ...item };
+        if (newItem.id === id) {
+          if (!newItem.clicked) {
+            newItem.clicked = true;
+            guessedCorrectly = true;
+          }
+        }
+        return newItem;
+      });
+      guessedCorrectly
+        ? this.handleCorrectGuess(newData)
+        : this.handleIncorrectGuess(newData);
+    };
 
     // use render() becase its a built in react function
     render() {
@@ -81,14 +90,11 @@ let count = neckbeards.count;
             {/* Wrapper holds all the cards and displays them in a grid */}
             <Wrapper> 
               {/* Map function goes through earch beard and makes a new array */}
-              {/* I was not able to make it to where the game resets on a double click
-                  I even worked with the tutor here he could not help me solve the issue */}
               {this.state.neckbeards.map(beard => (
                 <Card
-                  Counter={this.Counter}
+                  handleClick={this.handleCardClick}
                   id={beard.id}
                   key={beard.id}
-                  count={beard.count}
                   image={beard.image}
                 />
               ))}
